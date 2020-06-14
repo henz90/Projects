@@ -1,0 +1,296 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DOGWALKERModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DOGS">
+          <Key>
+            <PropertyRef Name="DogID" />
+          </Key>
+          <Property Name="DogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Alone" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OWNERS">
+          <Key>
+            <PropertyRef Name="OwnerID" />
+          </Key>
+          <Property Name="OwnerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Postal" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WALKS">
+          <Key>
+            <PropertyRef Name="WalkID" />
+          </Key>
+          <Property Name="WalkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DogID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Time" Type="nvarchar" MaxLength="7" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DOGWALKER.dbo.SCHEDULE' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="SCHEDULE">
+          <Key>
+            <PropertyRef Name="WalkID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Time" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Alone" />
+            <PropertyRef Name="OwnerID" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="Phone" />
+            <PropertyRef Name="Postal" />
+          </Key>
+          <Property Name="WalkID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Time" Type="nvarchar" MaxLength="7" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Alone" Type="bit" Nullable="false" />
+          <Property Name="OwnerID" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Postal" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_DOGS_OwnerID">
+          <End Role="OWNERS" Type="Self.OWNERS" Multiplicity="1" />
+          <End Role="DOGS" Type="Self.DOGS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OWNERS">
+              <PropertyRef Name="OwnerID" />
+            </Principal>
+            <Dependent Role="DOGS">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_WALKS_DogID">
+          <End Role="DOGS" Type="Self.DOGS" Multiplicity="1" />
+          <End Role="WALKS" Type="Self.WALKS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DOGS">
+              <PropertyRef Name="DogID" />
+            </Principal>
+            <Dependent Role="WALKS">
+              <PropertyRef Name="DogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DOGWALKERModelStoreContainer">
+          <EntitySet Name="DOGS" EntityType="Self.DOGS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OWNERS" EntityType="Self.OWNERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WALKS" EntityType="Self.WALKS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SCHEDULE" EntityType="Self.SCHEDULE" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [SCHEDULE].[WalkID] AS [WalkID], 
+    [SCHEDULE].[Date] AS [Date], 
+    [SCHEDULE].[Time] AS [Time], 
+    [SCHEDULE].[Name] AS [Name], 
+    [SCHEDULE].[Alone] AS [Alone], 
+    [SCHEDULE].[OwnerID] AS [OwnerID], 
+    [SCHEDULE].[FirstName] AS [FirstName], 
+    [SCHEDULE].[LastName] AS [LastName], 
+    [SCHEDULE].[Address] AS [Address], 
+    [SCHEDULE].[Phone] AS [Phone], 
+    [SCHEDULE].[Postal] AS [Postal]
+    FROM [dbo].[SCHEDULE] AS [SCHEDULE]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="fk_DOGS_OwnerID" Association="Self.fk_DOGS_OwnerID">
+            <End Role="OWNERS" EntitySet="OWNERS" />
+            <End Role="DOGS" EntitySet="DOGS" />
+          </AssociationSet>
+          <AssociationSet Name="fk_WALKS_DogID" Association="Self.fk_WALKS_DogID">
+            <End Role="DOGS" EntitySet="DOGS" />
+            <End Role="WALKS" EntitySet="WALKS" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DOGWALKERModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DOG">
+          <Key>
+            <PropertyRef Name="DogID" />
+          </Key>
+          <Property Name="DogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwnerID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Alone" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="OWNER" Relationship="Self.fk_DOGS_OwnerID" FromRole="DOGS" ToRole="OWNERS" />
+          <NavigationProperty Name="WALKS" Relationship="Self.fk_WALKS_DogID" FromRole="DOGS" ToRole="WALKS" />
+        </EntityType>
+        <EntityType Name="OWNER">
+          <Key>
+            <PropertyRef Name="OwnerID" />
+          </Key>
+          <Property Name="OwnerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Postal" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DOGS" Relationship="Self.fk_DOGS_OwnerID" FromRole="OWNERS" ToRole="DOGS" />
+        </EntityType>
+        <EntityType Name="WALK">
+          <Key>
+            <PropertyRef Name="WalkID" />
+          </Key>
+          <Property Name="WalkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DogID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="DOG" Relationship="Self.fk_WALKS_DogID" FromRole="WALKS" ToRole="DOGS" />
+          <Property Name="Time" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="fk_DOGS_OwnerID">
+          <End Role="OWNERS" Type="Self.OWNER" Multiplicity="1" />
+          <End Role="DOGS" Type="Self.DOG" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OWNERS">
+              <PropertyRef Name="OwnerID" />
+            </Principal>
+            <Dependent Role="DOGS">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_WALKS_DogID">
+          <End Role="DOGS" Type="Self.DOG" Multiplicity="1" />
+          <End Role="WALKS" Type="Self.WALK" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DOGS">
+              <PropertyRef Name="DogID" />
+            </Principal>
+            <Dependent Role="WALKS">
+              <PropertyRef Name="DogID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DWEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DOGS" EntityType="Self.DOG" />
+          <EntitySet Name="OWNERS" EntityType="Self.OWNER" />
+          <EntitySet Name="WALKS" EntityType="Self.WALK" />
+          <AssociationSet Name="fk_DOGS_OwnerID" Association="Self.fk_DOGS_OwnerID">
+            <End Role="OWNERS" EntitySet="OWNERS" />
+            <End Role="DOGS" EntitySet="DOGS" />
+          </AssociationSet>
+          <AssociationSet Name="fk_WALKS_DogID" Association="Self.fk_WALKS_DogID">
+            <End Role="DOGS" EntitySet="DOGS" />
+            <End Role="WALKS" EntitySet="WALKS" />
+          </AssociationSet>
+          <EntitySet Name="SCHEDULEs" EntityType="DOGWALKERModel.SCHEDULE" />
+        </EntityContainer>
+        <EntityType Name="SCHEDULE">
+          <Key>
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="OwnerID" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="Phone" />
+            <PropertyRef Name="Postal" />
+            <PropertyRef Name="WalkID" />
+            <PropertyRef Name="Alone" />
+            <PropertyRef Name="Time" />
+          </Key>
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OwnerID" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Postal" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="WalkID" Type="Int32" Nullable="false" />
+          <Property Name="Alone" Type="Boolean" Nullable="false" />
+          <Property Name="Time" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DOGWALKERModelStoreContainer" CdmEntityContainer="DWEntities">
+          <EntitySetMapping Name="DOGS">
+            <EntityTypeMapping TypeName="DOGWALKERModel.DOG">
+              <MappingFragment StoreEntitySet="DOGS">
+                <ScalarProperty Name="DogID" ColumnName="DogID" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Alone" ColumnName="Alone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OWNERS">
+            <EntityTypeMapping TypeName="DOGWALKERModel.OWNER">
+              <MappingFragment StoreEntitySet="OWNERS">
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Postal" ColumnName="Postal" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WALKS">
+            <EntityTypeMapping TypeName="DOGWALKERModel.WALK">
+              <MappingFragment StoreEntitySet="WALKS">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="WalkID" ColumnName="WalkID" />
+                <ScalarProperty Name="DogID" ColumnName="DogID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SCHEDULEs">
+            <EntityTypeMapping TypeName="DOGWALKERModel.SCHEDULE">
+              <MappingFragment StoreEntitySet="SCHEDULE">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Alone" ColumnName="Alone" />
+                <ScalarProperty Name="WalkID" ColumnName="WalkID" />
+                <ScalarProperty Name="Postal" ColumnName="Postal" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

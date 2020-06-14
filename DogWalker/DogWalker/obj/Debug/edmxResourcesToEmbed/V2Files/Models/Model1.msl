@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DOGWALKERModelStoreContainer" CdmEntityContainer="DOGWALKEREntities">
+    <EntitySetMapping Name="DOGS">
+      <EntityTypeMapping TypeName="DOGWALKERModel.DOG">
+        <MappingFragment StoreEntitySet="DOGS">
+          <ScalarProperty Name="DogID" ColumnName="DogID" />
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Alone" ColumnName="Alone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OWNERS">
+      <EntityTypeMapping TypeName="DOGWALKERModel.OWNER">
+        <MappingFragment StoreEntitySet="OWNERS">
+          <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Postal" ColumnName="Postal" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="WALKS">
+      <EntityTypeMapping TypeName="DOGWALKERModel.WALK">
+        <MappingFragment StoreEntitySet="WALKS">
+          <ScalarProperty Name="WalkID" ColumnName="WalkID" />
+          <ScalarProperty Name="DogID" ColumnName="DogID" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

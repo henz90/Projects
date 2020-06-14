@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DOGWALKERModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="DOG">
+    <Key>
+      <PropertyRef Name="DogID" />
+    </Key>
+    <Property Name="DogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OwnerID" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Alone" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="OWNER" Relationship="Self.fk_DOGS_OwnerID" FromRole="DOGS" ToRole="OWNERS" />
+    <NavigationProperty Name="WALKS" Relationship="Self.fk_WALKS_DogID" FromRole="DOGS" ToRole="WALKS" />
+  </EntityType>
+  <EntityType Name="OWNER">
+    <Key>
+      <PropertyRef Name="OwnerID" />
+    </Key>
+    <Property Name="OwnerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Postal" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="DOGS" Relationship="Self.fk_DOGS_OwnerID" FromRole="OWNERS" ToRole="DOGS" />
+  </EntityType>
+  <EntityType Name="WALK">
+    <Key>
+      <PropertyRef Name="WalkID" />
+    </Key>
+    <Property Name="WalkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DogID" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="DOG" Relationship="Self.fk_WALKS_DogID" FromRole="WALKS" ToRole="DOGS" />
+    <Property Name="Time" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="fk_DOGS_OwnerID">
+    <End Role="OWNERS" Type="Self.OWNER" Multiplicity="1" />
+    <End Role="DOGS" Type="Self.DOG" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OWNERS">
+        <PropertyRef Name="OwnerID" />
+      </Principal>
+      <Dependent Role="DOGS">
+        <PropertyRef Name="OwnerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_WALKS_DogID">
+    <End Role="DOGS" Type="Self.DOG" Multiplicity="1" />
+    <End Role="WALKS" Type="Self.WALK" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DOGS">
+        <PropertyRef Name="DogID" />
+      </Principal>
+      <Dependent Role="WALKS">
+        <PropertyRef Name="DogID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DWEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="DOGS" EntityType="Self.DOG" />
+    <EntitySet Name="OWNERS" EntityType="Self.OWNER" />
+    <EntitySet Name="WALKS" EntityType="Self.WALK" />
+    <AssociationSet Name="fk_DOGS_OwnerID" Association="Self.fk_DOGS_OwnerID">
+      <End Role="OWNERS" EntitySet="OWNERS" />
+      <End Role="DOGS" EntitySet="DOGS" />
+    </AssociationSet>
+    <AssociationSet Name="fk_WALKS_DogID" Association="Self.fk_WALKS_DogID">
+      <End Role="DOGS" EntitySet="DOGS" />
+      <End Role="WALKS" EntitySet="WALKS" />
+    </AssociationSet>
+    <EntitySet Name="SCHEDULEs" EntityType="DOGWALKERModel.SCHEDULE" />
+  </EntityContainer>
+  <EntityType Name="SCHEDULE">
+    <Key>
+      <PropertyRef Name="Date" />
+      <PropertyRef Name="Name" />
+      <PropertyRef Name="OwnerID" />
+      <PropertyRef Name="FirstName" />
+      <PropertyRef Name="LastName" />
+      <PropertyRef Name="Address" />
+      <PropertyRef Name="Phone" />
+      <PropertyRef Name="Postal" />
+      <PropertyRef Name="WalkID" />
+      <PropertyRef Name="Alone" />
+      <PropertyRef Name="Time" />
+    </Key>
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="OwnerID" Type="Int32" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Postal" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="WalkID" Type="Int32" Nullable="false" />
+    <Property Name="Alone" Type="Boolean" Nullable="false" />
+    <Property Name="Time" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>

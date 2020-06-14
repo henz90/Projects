@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DOGWALKERModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DOGS">
+    <Key>
+      <PropertyRef Name="DogID" />
+    </Key>
+    <Property Name="DogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OwnerID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Alone" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OWNERS">
+    <Key>
+      <PropertyRef Name="OwnerID" />
+    </Key>
+    <Property Name="OwnerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Address" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Postal" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="WALKS">
+    <Key>
+      <PropertyRef Name="WalkID" />
+    </Key>
+    <Property Name="WalkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DogID" Type="int" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+  </EntityType>
+  <Association Name="fk_DOGS_OwnerID">
+    <End Role="OWNERS" Type="Self.OWNERS" Multiplicity="1" />
+    <End Role="DOGS" Type="Self.DOGS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OWNERS">
+        <PropertyRef Name="OwnerID" />
+      </Principal>
+      <Dependent Role="DOGS">
+        <PropertyRef Name="OwnerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_WALKS_DogID">
+    <End Role="DOGS" Type="Self.DOGS" Multiplicity="1" />
+    <End Role="WALKS" Type="Self.WALKS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DOGS">
+        <PropertyRef Name="DogID" />
+      </Principal>
+      <Dependent Role="WALKS">
+        <PropertyRef Name="DogID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DOGWALKERModelStoreContainer">
+    <EntitySet Name="DOGS" EntityType="Self.DOGS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OWNERS" EntityType="Self.OWNERS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="WALKS" EntityType="Self.WALKS" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_DOGS_OwnerID" Association="Self.fk_DOGS_OwnerID">
+      <End Role="OWNERS" EntitySet="OWNERS" />
+      <End Role="DOGS" EntitySet="DOGS" />
+    </AssociationSet>
+    <AssociationSet Name="fk_WALKS_DogID" Association="Self.fk_WALKS_DogID">
+      <End Role="DOGS" EntitySet="DOGS" />
+      <End Role="WALKS" EntitySet="WALKS" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
